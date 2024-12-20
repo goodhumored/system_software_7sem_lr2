@@ -4,12 +4,12 @@ import (
 	"errors"
 	"fmt"
 
-	"goodhumored/lr1_object_code_generator/syntax_analyzer/nonterminal"
-	"goodhumored/lr1_object_code_generator/syntax_analyzer/parse_tree"
-	"goodhumored/lr1_object_code_generator/syntax_analyzer/precedence"
-	"goodhumored/lr1_object_code_generator/syntax_analyzer/rule"
-	"goodhumored/lr1_object_code_generator/token"
-	"goodhumored/lr1_object_code_generator/token_table"
+	"goodhumored/lr2_types_memory/syntax_analyzer/nonterminal"
+	"goodhumored/lr2_types_memory/syntax_analyzer/parse_tree"
+	"goodhumored/lr2_types_memory/syntax_analyzer/precedence"
+	"goodhumored/lr2_types_memory/syntax_analyzer/rule"
+	"goodhumored/lr2_types_memory/token"
+	"goodhumored/lr2_types_memory/token_table"
 )
 
 // Функция для анализа синтаксиса, принимает таблицу токенов, список правил и матрицу предшествования

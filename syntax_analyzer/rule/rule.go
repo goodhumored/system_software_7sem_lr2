@@ -3,7 +3,7 @@ package rule
 import (
 	"fmt"
 
-	"goodhumored/lr1_object_code_generator/syntax_analyzer/nonterminal"
+	"goodhumored/lr2_types_memory/syntax_analyzer/nonterminal"
 )
 
 // Интерфейс для представления символа

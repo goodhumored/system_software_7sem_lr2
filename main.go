@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"os"
 
-	codegenerator "goodhumored/lr1_object_code_generator/code_generator"
-	"goodhumored/lr1_object_code_generator/syntax_analyzer"
-	"goodhumored/lr1_object_code_generator/token_analyzer"
+	"goodhumored/lr2_types_memory/syntax_analyzer"
+	"goodhumored/lr2_types_memory/token_analyzer"
 )
 
 func main() {
-	source := getInput("./input-hard.txt") // читаем файл
+	source := getInput("./input.txt") // читаем файл
 
 	// выводим содержимо
 	println("Содержимое входного файла:\n")
@@ -41,14 +40,6 @@ func main() {
 		fmt.Println("Строка принята!!!")
 		tree.Print()
 	}
-
-	// запускаем генерацию объедкного кода
-	code, err := codegenerator.GenerateCode(tree)
-	if err != nil {
-		fmt.Printf("Во время генерации кода возникли следующие ошибки: %v", err)
-	}
-	fmt.Printf("Результирующий код:\n%v\n", code)
-	fmt.Printf("Исходный код: \n%s", source)
 }
 
 // Читает файл с входными данными, вызывает панику в случае неудачи

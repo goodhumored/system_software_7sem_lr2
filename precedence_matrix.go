@@ -1,8 +1,8 @@
 package main
 
 import (
-	"goodhumored/lr1_object_code_generator/syntax_analyzer/precedence"
-	"goodhumored/lr1_object_code_generator/token"
+	"goodhumored/lr2_types_memory/syntax_analyzer/precedence"
+	"goodhumored/lr2_types_memory/token"
 )
 
 // Матрица предшествования

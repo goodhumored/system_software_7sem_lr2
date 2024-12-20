@@ -1,9 +1,9 @@
 package main
 
 import (
-	"goodhumored/lr1_object_code_generator/syntax_analyzer/nonterminal"
-	"goodhumored/lr1_object_code_generator/syntax_analyzer/rule"
-	"goodhumored/lr1_object_code_generator/token"
+	"goodhumored/lr2_types_memory/syntax_analyzer/nonterminal"
+	"goodhumored/lr2_types_memory/syntax_analyzer/rule"
+	"goodhumored/lr2_types_memory/token"
 )
 
 func or(symbols ...rule.Symbol) []rule.Symbol {

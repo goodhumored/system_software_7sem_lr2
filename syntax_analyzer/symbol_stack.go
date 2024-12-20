@@ -3,8 +3,8 @@ package syntax_analyzer
 import (
 	"fmt"
 
-	"goodhumored/lr1_object_code_generator/syntax_analyzer/rule"
-	"goodhumored/lr1_object_code_generator/token"
+	"goodhumored/lr2_types_memory/syntax_analyzer/rule"
+	"goodhumored/lr2_types_memory/token"
 )
 
 // Стек символов
