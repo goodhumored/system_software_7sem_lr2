@@ -15,16 +15,16 @@ type TokenPattern struct {
 
 // Массив соответствий шаблонов лексем
 var tokenPatterns = []TokenPattern{
-	{regex("or"), token.Or},
-	{regex("xor"), token.Xor},
-	{regex("and"), token.And},
-	{regex("not"), token.Not},
-	{regex("(0x|[0-9$])[0-9a-fA-F]+"), token.Identifier},
+	{regex("\\btype\\b"), token.Type},
+	{regex("\\bvar\\b"), token.Var},
+	{regex("\\brecord\\b"), token.Record},
+	{regex(":"), token.TypeSeparator},
+	{regex("\\bend\\b"), token.End},
 	{regex("[a-zA-Z][a-zA-Z0-9]+"), token.Identifier},
-	{regex(":="), token.Assignment},
+	{regex("="), token.Assignment},
 	{regex("#.*"), token.Comment},
-	{regex("[(]"), token.LeftParenth},
-	{regex("[)]"), token.RightParenth},
+	{regex("[(]"), token.Record},
+	{regex("[)]"), token.End},
 	{regex(";"), token.Delimiter},
 }
 

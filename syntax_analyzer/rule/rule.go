@@ -14,10 +14,17 @@ type Symbol interface {
 // Правило
 type Rule struct {
 	Left  nonterminal.NonTerminal
-	Right [][]Symbol
+	Right []RuleItem
 }
 
 // Метод получения строки из правила
 func (r Rule) String() string {
 	return fmt.Sprintf("%s -> %s", r.Left.GetName(), r.Right)
+}
+
+func NewRule(left nonterminal.NonTerminal, right []RuleItem) Rule {
+	return Rule{
+		Left:  left,
+		Right: right,
+	}
 }

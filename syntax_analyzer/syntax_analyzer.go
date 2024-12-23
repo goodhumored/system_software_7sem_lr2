@@ -26,15 +26,19 @@ func AnalyzeSyntax(ruleTable rule.RuleTable, tokenTable token_table.TokenTable, 
 	for {
 		// Берём ближайший к вершине терминал
 		stackTerminal := stack.PeekTopTerminal()
-		// Берём текущий символ входной строки
+		// если токены кончились - смотрим если можем свернуть корень и вернуть результат
 		if len(tokens) <= tokenIndex {
+			ok, err := isInputAccepted(stack, ruleTable)
+			if err != nil {
+				return tree, err
+			}
+			if ok {
+				return tree, nil
+			}
 			return tree, errors.New("Токены закончились, до конца свернуть не удалось")
 		}
+		// Берём текущий символ входной строки
 		inputToken := tokens[tokenIndex]
-		// Если строка принята, значит возвращаем дерево вывода
-		if isInputAccepted(inputToken, stack) {
-			return tree, nil
-		}
 		// Если комментарий - пропускаем
 		if inputToken.Type == token.CommentType {
 			tokenIndex += 1
@@ -73,24 +77,27 @@ func AnalyzeSyntax(ruleTable rule.RuleTable, tokenTable token_table.TokenTable, 
 }
 
 // Проверка на завершённость
-func isInputAccepted(currentToken token.Token, stack symbolStack) bool {
-	nextTerminal := stack.PeekTopTerminal()
-	nextSymbol := stack.Peek()
-	return currentToken.Type == token.EOFType && // Если дошли до конца строки
-		nextTerminal != nil &&
-		nextTerminal.Type == token.Start.Type && // Если ближайший терминал в стеке - начало строки
-		nextSymbol != nil &&
-		nextSymbol == nonterminal.Assignment // А на вершине строки - целевой символ
+func isInputAccepted(stack symbolStack, ruleTable rule.RuleTable) (bool, error) {
+	// Пытаемся свернуть
+	newStack, _, err := reduce(stack, ruleTable)
+	if err != nil {
+		return false, err
+	}
+	// Если в стеке верхушка теперь рут
+	if newStack.Peek().GetName() == nonterminal.Root.Name {
+		return true, nil
+	}
+	return false, nil
 }
 
 // Функция свёртки стека
 func reduce(stack symbolStack, ruleTable rule.RuleTable) (symbolStack, *rule.Rule, error) {
 	for {
 		// Если есть применимое к стеку правило
-		if rule := ruleTable.GetRuleByRightSide(stack); rule != nil {
+		if rule, count := ruleTable.GetRuleByRightSide(stack); rule != nil {
 			fmt.Printf("Нашлось правило: %v, пушим %s в стек\n", rule, rule.Left)
 			// обновляем стек
-			stack = append(stack[:len(stack)-len(rule.Right)], rule.Left)
+			stack = append(stack[:len(stack)-count], rule.Left)
 			return stack, rule, nil
 		} else {
 			// Если нет выдаем ошибку

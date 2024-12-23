@@ -15,11 +15,10 @@ func (nt NonTerminal) Value() string {
 }
 
 var (
-	E           = NonTerminal{"E"}                // Стандартный нетерминал
-	Parenthesis = NonTerminal{"PARENTHESIS"}      // Стандартный нетерминал
-	Assignment  = NonTerminal{"ASSIGNMENT"}       // Стандартный нетерминал
-	Binary      = NonTerminal{"BINARY_OPERATION"} // Стандартный нетерминал
-	Value       = NonTerminal{"VALUE"}            // Стандартный нетерминал
-	Unary       = NonTerminal{"UNARY_OPERATION"}  // Стандартный нетерминал
-	Root        = NonTerminal{"/"}                // Корневой нетерминал
+	Record          = NonTerminal{"Record"}
+	TypeBlock       = NonTerminal{"TypeBlock"}
+	VarBlock        = NonTerminal{"VarBlock"}
+	TypeDeclaration = NonTerminal{"TypeDeclaration"}
+	VarDeclaration  = NonTerminal{"VarDeclaration"}
+	Root            = NonTerminal{"/"} // Корневой нетерминал
 )

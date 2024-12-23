@@ -42,17 +42,16 @@ func (token Token) String() string {
 
 // Функции создания лексем определённых типов
 var (
-	Delimiter    = tokenFactory(DelimiterType)           // Разделиитель
-	Identifier   = tokenFactory(IdentifierType)          // Идентификатор
-	Assignment   = tokenFactory(AssignmentType)          // Присваивание
-	And          = tokenFactory(AndType)                 // И
-	Or           = tokenFactory(OrType)                  // Или
-	Xor          = tokenFactory(XorType)                 // Исключающее или
-	Not          = tokenFactory(NotType)                 // Не
-	LeftParenth  = tokenFactory(LeftParenthType)         // Левая скобка
-	RightParenth = tokenFactory(RightParenthType)        // Правая скобка
-	Error        = tokenFactory(ErrorType)               // Ошибка
-	Comment      = tokenFactory(CommentType)             // Комментарий
-	Start        = Token{StartType, "", Position{0, 0}}  // Начало строки
-	EOF          = Token{EOFType, "EOF", Position{0, 0}} // Конец
+	Delimiter     = tokenFactory(DelimiterType)           // Разделиитель
+	Identifier    = tokenFactory(IdentifierType)          // Идентификатор
+	Assignment    = tokenFactory(AssignmentType)          // =
+	TypeSeparator = tokenFactory(TypeSeparatorType)       // =
+	Type          = tokenFactory(TypeType)                // type
+	Var           = tokenFactory(VarType)                 // var
+	Record        = tokenFactory(RecordStartType)         // record
+	End           = tokenFactory(RecordEndType)           // end
+	Error         = tokenFactory(ErrorType)               // Ошибка
+	Comment       = tokenFactory(CommentType)             // Комментарий
+	Start         = Token{StartType, "", Position{0, 0}}  // Начало строки
+	EOF           = Token{EOFType, "EOF", Position{0, 0}} // Конец
 )

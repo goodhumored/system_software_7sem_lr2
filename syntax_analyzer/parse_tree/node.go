@@ -25,24 +25,27 @@ func (n *Node) AddChild(child *Node) {
 
 // Метод свёртки узла дерева
 func (node *Node) Reduce(rule rule.Rule) bool {
+	node.Print("", true)
 	// Если не можем применить правило к текущему узлу - уходим
-	if !node.CanApplyRule(rule) {
+	symbolsCount, ok := node.CanApplyRule(rule)
+	if !ok {
 		return false
 	}
-	// считаем разницу длин правой части правила и детей узла
-	lenDiff := len(node.Children) - len(rule.Right)
 
+	lenDiff := len(node.Children) - symbolsCount
+	fmt.Printf("lenDiff: %v, symbolsCount: %v, childrenCount: %v\n", lenDiff, symbolsCount, len(node.Children))
 	// копируем слайс с нужными нам узлами, которые собираемся заменять
-	nodes := make([]*Node, len(rule.Right))
+	nodes := make([]*Node, symbolsCount)
 	copy(nodes, node.Children[lenDiff:])
 
 	// перезаписываем дочерние узлы узла
 	node.Children = append(node.Children[:lenDiff], &Node{Symbol: rule.Left, Children: nodes, Value: ""})
+	node.Print("", true)
 	return true
 }
 
 // Функция проверки возможности применения правила к дочерним узлам узла
-func (node Node) CanApplyRule(ruleToCheck rule.Rule) bool {
+func (node Node) CanApplyRule(ruleToCheck rule.Rule) (int, bool) {
 	childrenSymbols := []rule.Symbol{}
 	for _, child := range node.Children {
 		childrenSymbols = append(childrenSymbols, child.Symbol)

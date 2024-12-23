@@ -1,0 +1,19 @@
+type
+  type0 = byte;
+  type1 = extended;
+  type2 = record
+    id: type1;
+    id1: byte;
+    id2: extended;
+  end;
+var
+  id3: byte;
+  id4: extended;
+  id5: type1;
+  id6: type2;
+
+  id7: record
+    id8: type1;
+    id9: byte;
+    id10: extended;
+  end;

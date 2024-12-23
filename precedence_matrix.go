@@ -5,15 +5,20 @@ import (
 	"goodhumored/lr2_types_memory/token"
 )
 
+var (
+	eq = precedence.Eq
+	lt = precedence.Lt
+	gt = precedence.Gt
+)
+
 // Матрица предшествования
 var precedenceMatrix = precedence.Matrix{
-	token.IdentifierType:   precedence.Row{token.AssignmentType: precedence.Eq, token.RightParenthType: precedence.Gt, token.OrType: precedence.Gt, token.XorType: precedence.Gt, token.AndType: precedence.Gt, token.DelimiterType: precedence.Gt},
-	token.AssignmentType:   precedence.Row{token.IdentifierType: precedence.Lt, token.LeftParenthType: precedence.Lt, token.RightParenthType: precedence.Lt, token.NotType: precedence.Lt, token.OrType: precedence.Lt, token.XorType: precedence.Lt, token.AndType: precedence.Lt, token.DelimiterType: precedence.Eq},
-	token.LeftParenthType:  precedence.Row{token.IdentifierType: precedence.Lt, token.LeftParenthType: precedence.Lt, token.RightParenthType: precedence.Eq, token.NotType: precedence.Lt, token.OrType: precedence.Lt, token.XorType: precedence.Lt, token.AndType: precedence.Lt},
-	token.RightParenthType: precedence.Row{token.RightParenthType: precedence.Gt, token.OrType: precedence.Gt, token.XorType: precedence.Gt, token.AndType: precedence.Gt, token.DelimiterType: precedence.Gt},
-	token.NotType:          precedence.Row{token.LeftParenthType: precedence.Lt},
-	token.OrType:           precedence.Row{token.IdentifierType: precedence.Lt, token.LeftParenthType: precedence.Lt, token.RightParenthType: precedence.Gt, token.NotType: precedence.Lt, token.OrType: precedence.Gt, token.XorType: precedence.Gt, token.AndType: precedence.Lt, token.DelimiterType: precedence.Gt},
-	token.XorType:          precedence.Row{token.IdentifierType: precedence.Lt, token.LeftParenthType: precedence.Lt, token.RightParenthType: precedence.Gt, token.NotType: precedence.Lt, token.OrType: precedence.Gt, token.XorType: precedence.Gt, token.AndType: precedence.Lt, token.DelimiterType: precedence.Gt},
-	token.AndType:          precedence.Row{token.IdentifierType: precedence.Lt, token.LeftParenthType: precedence.Lt, token.RightParenthType: precedence.Gt, token.NotType: precedence.Lt, token.OrType: precedence.Gt, token.XorType: precedence.Gt, token.AndType: precedence.Gt, token.DelimiterType: precedence.Gt},
-	token.DelimiterType:    precedence.Row{token.IdentifierType: precedence.Gt},
+	token.TypeType:          precedence.Row{token.IdentifierType: lt, token.VarType: gt},
+	token.IdentifierType:    precedence.Row{token.AssignmentType: eq, token.TypeSeparatorType: lt, token.DelimiterType: lt},
+	token.AssignmentType:    precedence.Row{token.IdentifierType: lt, token.RecordStartType: eq, token.DelimiterType: eq},
+	token.VarType:           precedence.Row{token.IdentifierType: lt},
+	token.TypeSeparatorType: precedence.Row{token.IdentifierType: lt, token.RecordStartType: eq, token.DelimiterType: eq},
+	token.RecordStartType:   precedence.Row{token.IdentifierType: lt, token.RecordEndType: eq, token.DelimiterType: lt},
+	token.RecordEndType:     precedence.Row{token.DelimiterType: gt},
+	token.DelimiterType:     precedence.Row{token.IdentifierType: gt, token.RecordEndType: gt, token.VarType: gt},
 }

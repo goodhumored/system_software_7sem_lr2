@@ -9,11 +9,12 @@ import (
 )
 
 func main() {
-	source := getInput("./input.txt") // читаем файл
+	source := getInput("./input-everything.txt") // читаем файл
 
-	// выводим содержимо
-	println("Содержимое входного файла:\n")
-	fmt.Println(source)
+	defer func() {
+		println("Исходный код:")
+		fmt.Println(source)
+	}()
 
 	// запускаем распознание лексем
 	tokenTable := token_analyzer.RecogniseTokens(source)
@@ -34,7 +35,7 @@ func main() {
 	// запускаем синтаксический анализатор
 	tree, err := syntax_analyzer.AnalyzeSyntax(rulesTable, *tokenTable, precedenceMatrix)
 	if err != nil {
-		fmt.Printf("Ошибка при синтаксическом анализе строки: %s", err)
+		fmt.Printf("Ошибка при синтаксическом анализе строки: %s\n", err)
 		return
 	} else {
 		fmt.Println("Строка принята!!!")

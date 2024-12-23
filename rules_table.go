@@ -6,51 +6,61 @@ import (
 	"goodhumored/lr2_types_memory/token"
 )
 
-func or(symbols ...rule.Symbol) []rule.Symbol {
-	return symbols
+func one(symbols ...rule.Symbol) rule.RuleItem {
+	return rule.NewRuleItem(false, false, symbols...)
+}
+
+func optional(symbols ...rule.Symbol) rule.RuleItem {
+	return rule.NewRuleItem(true, false, symbols...)
+}
+
+func optionalMany(symbols ...rule.Symbol) rule.RuleItem {
+	return rule.NewRuleItem(true, true, symbols...)
+}
+
+func many(symbols ...rule.Symbol) rule.RuleItem {
+	return rule.NewRuleItem(false, true, symbols...)
 }
 
 var (
-	valueSymbols           = or(nonterminal.Binary, nonterminal.Unary, token.IdentifierType, token.ConstantType, nonterminal.Parenthesis, nonterminal.Value)
-	binaryOperatorsSymbols = or(token.AndType, token.OrType, token.XorType)
+	rootRule = rule.NewRule(nonterminal.Root, []rule.RuleItem{
+		one(token.StartType),
+		one(nonterminal.TypeBlock),
+		one(nonterminal.VarBlock),
+		one(token.EOFType),
+	})
+	typeBlockRule = rule.NewRule(nonterminal.TypeBlock, []rule.RuleItem{
+		one(token.TypeType),
+		optionalMany(nonterminal.TypeDeclaration),
+	})
+	typeDeclarationRule = rule.NewRule(nonterminal.TypeDeclaration, []rule.RuleItem{
+		one(token.IdentifierType),
+		one(token.AssignmentType),
+		one(token.IdentifierType, nonterminal.Record),
+		one(token.DelimiterType),
+	})
+	recordRule = rule.NewRule(nonterminal.Record, []rule.RuleItem{
+		one(token.RecordStartType),
+		optionalMany(nonterminal.VarDeclaration),
+		one(token.RecordEndType),
+	})
+	varBlockRule = rule.NewRule(nonterminal.VarBlock, []rule.RuleItem{
+		one(token.VarType),
+		optionalMany(nonterminal.VarDeclaration),
+	})
+	varDeclarationRule = rule.NewRule(nonterminal.VarDeclaration, []rule.RuleItem{
+		one(token.IdentifierType),
+		one(token.TypeSeparatorType),
+		one(token.IdentifierType, nonterminal.Record),
+		one(token.DelimiterType),
+	})
 )
 
-// Правила грамматики
-var assignmentRule = rule.Rule{
-	Left:  nonterminal.Assignment,
-	Right: [][]rule.Symbol{or(token.IdentifierType), or(token.AssignmentType), valueSymbols, or(token.DelimiterType)},
-}
-
-var binaryRule = rule.Rule{
-	Left:  nonterminal.Binary,
-	Right: [][]rule.Symbol{valueSymbols, binaryOperatorsSymbols, valueSymbols},
-}
-
-var unaryRule = rule.Rule{
-	Left:  nonterminal.Unary,
-	Right: [][]rule.Symbol{or(token.NotType), or(token.LeftParenthType), valueSymbols, or(token.RightParenthType)},
-}
-
-var parenthesisRule = rule.Rule{
-	Left:  nonterminal.Parenthesis,
-	Right: [][]rule.Symbol{or(token.LeftParenthType), valueSymbols, or(token.RightParenthType)},
-}
-
-var identifierRule = rule.Rule{
-	Left:  nonterminal.Value,
-	Right: [][]rule.Symbol{valueSymbols},
-}
-
-var rootRule = rule.Rule{
-	Left:  nonterminal.Root,
-	Right: [][]rule.Symbol{or(token.StartType), or(nonterminal.Assignment), or(token.EOFType)},
-}
-
 var rulesTable = rule.RuleTable{Rules: []rule.Rule{
-	unaryRule,
-	parenthesisRule,
-	binaryRule,
-	assignmentRule,
+	varDeclarationRule,
+	varBlockRule,
+	recordRule,
+	typeDeclarationRule,
+	typeBlockRule,
 	rootRule,
-	identifierRule,
 }}
