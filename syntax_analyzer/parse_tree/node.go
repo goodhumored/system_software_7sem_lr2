@@ -53,6 +53,10 @@ func (node Node) CanApplyRule(ruleToCheck rule.Rule) (int, bool) {
 	return rule.IsApplyable(ruleToCheck.Right, childrenSymbols)
 }
 
+func (node Node) String() string {
+	return node.Symbol.GetName()
+}
+
 // Метод для рекурсивного вывода узлов дерева в консоль
 func (node *Node) Print(prefix string, isTail bool) {
 	// Выводим символ узла с отступом

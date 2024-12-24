@@ -26,6 +26,19 @@ func (tree *ParseTree) Reduce(rule rule.Rule) {
 	}
 }
 
+func (tree ParseTree) BFS(symbol rule.Symbol) []*Node {
+	nodes := []*Node{}
+	queue := []*Node{tree.Root}
+	for len(queue) > 0 {
+		curNode := queue[0]
+		if curNode.Symbol.GetName() == symbol.GetName() {
+			nodes = append(nodes, curNode)
+		}
+		queue = append(queue[1:], curNode.Children...)
+	}
+	return nodes
+}
+
 // Метод для вывода дерева
 func (tree ParseTree) Print() {
 	tree.Root.Print("", true)

@@ -6,6 +6,7 @@ import (
 
 	"goodhumored/lr2_types_memory/syntax_analyzer"
 	"goodhumored/lr2_types_memory/token_analyzer"
+	typeanalyzer "goodhumored/lr2_types_memory/type_analyzer"
 )
 
 func main() {
@@ -41,6 +42,20 @@ func main() {
 		fmt.Println("Строка принята!!!")
 		tree.Print()
 	}
+	typeAnalyzer := typeanalyzer.NewTypeAnalyzer()
+	err = typeAnalyzer.AnalyzeTypes(tree)
+	if err != nil {
+		fmt.Printf("Ошибка при подсчёте выделяемой памяти: %s\n", err)
+		return
+	}
+	varInfos := typeAnalyzer.GetVariablesMemory()
+	totalMemo := 0
+	fmt.Println("\nВыделение памяти под переменные: ")
+	for i, varInfo := range varInfos {
+		fmt.Printf("%d) %s: %d Байт\n", i, varInfo.Name, varInfo.Size)
+		totalMemo += varInfo.Size
+	}
+	fmt.Printf("\nВсего памяти выделяется под переменные: %v Байт\n\n", totalMemo)
 }
 
 // Читает файл с входными данными, вызывает панику в случае неудачи
