@@ -13,7 +13,7 @@ func main() {
 	source := getInput("./input-everything.txt") // читаем файл
 
 	defer func() {
-		println("Исходный код:")
+		println("\n=================Исходный код:=================\n")
 		fmt.Println(source)
 	}()
 
@@ -42,20 +42,18 @@ func main() {
 		fmt.Println("Строка принята!!!")
 		tree.Print()
 	}
-	typeAnalyzer := typeanalyzer.NewTypeAnalyzer()
+	typeAnalyzer := typeanalyzer.NewTypeAnalyzer(8, true)
+	typeAnalyzerWithoutAlignment := typeanalyzer.NewTypeAnalyzer(1, false)
 	err = typeAnalyzer.AnalyzeTypes(tree)
+	_ = typeAnalyzerWithoutAlignment.AnalyzeTypes(tree)
 	if err != nil {
 		fmt.Printf("Ошибка при подсчёте выделяемой памяти: %s\n", err)
 		return
 	}
-	varInfos := typeAnalyzer.GetVariablesMemory()
-	totalMemo := 0
-	fmt.Println("\nВыделение памяти под переменные: ")
-	for i, varInfo := range varInfos {
-		fmt.Printf("%d) %s: %d Байт\n", i, varInfo.Name, varInfo.Size)
-		totalMemo += varInfo.Size
-	}
-	fmt.Printf("\nВсего памяти выделяется под переменные: %v Байт\n\n", totalMemo)
+	println("\n\n===============================Выделение памяти с кратностью распределения:=====================")
+	typeAnalyzer.PrintGatheredInfo()
+	println("\n\n===============================Выделение памяти без кратности распределения:=====================")
+	typeAnalyzerWithoutAlignment.PrintGatheredInfo()
 }
 
 // Читает файл с входными данными, вызывает панику в случае неудачи
